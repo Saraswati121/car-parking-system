@@ -3,23 +3,34 @@ const authRoute = Router()
 const authmodel = require("../models/authModel")
 const jwt = require('jsonwebtoken');
 
-authRoute.post("/signup", async(req,res) => {
-    const userMail = await authmodel.findOne({email: req.body.email})
-    if(userMail){
-        return res.send({message: "user already registered"})
+authRoute.post("/signup", async (req, res) => {
+    try {
+      const userMail = await authmodel.findOne({ email: req.body.email });
+  
+      if (!req.body.userName || !req.body.email || !req.body.password || !req.body.role) {
+        return res.status(422).send({ message: "Please fill in all the details." });
+      }
+  
+      if (userMail) {
+        return res.send({ message: "User already registered." });
+      }
+  
+      const user = new authmodel(req.body);
+      await user.save();
+  
+      return res.status(201).send({ message: "Signup successful", authmodel: user });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ message: "An error occurred while signing up." });
     }
-
-    const user = new authmodel(req.body)
-    user.save((err,success) => {
-        if(err){
-            return res.status(500).send({message:"Error Occured"})
-        }
-        return res.status(201).send({message:"signup successful",authmodel:success._doc})
-    })
-})
+  });
+  
 
 authRoute.post("/login",async(req,res) => {
     const {email,password} = req.body
+    if (!email || !password) {
+        return res.status(422).send({ message: "fill all the details" });
+    }
     const validUser = await authmodel.findOne({email,password})
 
     if(!validUser){
@@ -29,8 +40,9 @@ authRoute.post("/login",async(req,res) => {
         userName : validUser.lastName,
         email : validUser.email,
         password : validUser.password,
+        role: validUser.role,
     },'Secret')
-    return res.status(201).send({validUser,token})
+    return res.status(201).send({message:"login successful",validUser,token})
 })
 
 module.exports= authRoute
