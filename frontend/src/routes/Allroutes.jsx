@@ -6,6 +6,7 @@ import { Admin } from '../component/Admin'
 import { Navbar } from '../component/Navbar'
 import { User } from '../component/User'
 import {About} from '../component/About'
+import {Contact} from '../component/Contact'
 
 export const AllRoutes = () => {
   return (
@@ -16,7 +17,9 @@ export const AllRoutes = () => {
           <Route path='/admin' element={<Admin/>}></Route>
           <Route path='/user' element={<User/>}></Route>
           <Route path='/about' element={<About/>}></Route>
+          <Route path='/contact' element={<Contact/>}></Route>
           <Route path='/navbar' element={<Navbar/>}></Route>
+          
         </Routes>
     </div>
   )

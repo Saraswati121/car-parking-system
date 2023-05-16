@@ -161,7 +161,7 @@
     width: 120px;
     background-color: rgb(149, 235, 118);
 }
-#about{
+.about{
   color: whitesmoke;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   background-color: rgb(121, 82, 179);

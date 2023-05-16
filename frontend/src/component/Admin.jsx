@@ -4,8 +4,7 @@ import { Navbar } from './Navbar'
 export const Admin = () => {
   return (
     <div>
-      <Navbar/>
-      
+      <Navbar/> 
     </div>
   )
 }

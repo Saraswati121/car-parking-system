@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const ReviewSchema = mongoose. Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'auth', required: true },
     parkingPlace: { type: Schema.Types.ObjectId, ref: 'ParkingPlace', required: true },
     rating: { type: Number, required: true },
     comment: { type: String },
