@@ -5,8 +5,8 @@ const parkingmodel = require("../models/Parkingplace")
 
 serviceRequest.post('/users/servicesRequest',async(req,res)=>{
     try {
-        const { placeName, vehicleType, duration } = req.body;
-        const parkingPlace = await parkingmodel.findOne({ placeName });
+        const { place, vehicleType, duration } = req.body;
+        const parkingPlace = await parkingmodel.findOne({ placeName:place });
         if (!parkingPlace) {
           return res.status(404).json({ error: 'Parking place not found' });
         }
@@ -53,7 +53,7 @@ serviceRequest.patch('/users/service-requests/:id', async (req, res) => {
     }
 });
 
-serviceRequest.delete('',async(req, res) => {
+serviceRequest.delete('/user/serviceRequest/:id',async(req, res) => {
     try {
         const { id } = req.params;
         const serviceRequest = await requestModel.findByIdAndDelete(id);
@@ -63,3 +63,5 @@ serviceRequest.delete('',async(req, res) => {
         res.status(500).json({ error: 'Server error' });
       }
 })
+
+module.exports = serviceRequest;

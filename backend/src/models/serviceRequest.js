@@ -5,9 +5,10 @@ const requestSchema= mongoose.Schema({
     vehicleType: { type: String, required: true },
     duration: { type: Number, required: true },
     //status: { type: String, enum: ['pending', 'accepted', 'rejected', 'canceled'], default: 'pending' },
-    status : { type: String, required: true}
+    status : { type: String, required: true},
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'auth', required: true },
 })
 
-const requestModel = mongoose.model("Request",requestSchema)
+const requestModel = mongoose.model("request",requestSchema)
 
 module.exports = requestModel

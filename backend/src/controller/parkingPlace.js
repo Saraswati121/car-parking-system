@@ -33,7 +33,7 @@ parkingRoute.post("/parkingPlace",async(req,res)=>{
 parkingRoute.get("/customer/parkingPlace",async(req,res)=>{
   try{
     const parkingPlace= await parkingmodel.find(
-      res.send(parkingPlace)
+      res.json(parkingPlace)
     )
   }catch(err){
     res.status(500).json({ message: 'Server Error', err});
