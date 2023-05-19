@@ -3,32 +3,41 @@ const serviceRequest= Router()
 const requestModel= require('../models/serviceRequest')
 const parkingmodel = require("../models/Parkingplace")
 
-serviceRequest.post('/users/servicesRequest',async(req,res)=>{
-    try {
-        const { place, vehicleType, duration } = req.body;
-        const parkingPlace = await parkingmodel.findOne({ placeName:place });
-        if (!parkingPlace) {
-          return res.status(404).json({ error: 'Parking place not found' });
-        }
-    
-        const { availableSlots } = parkingPlace;
-        const slotsForVehicle = vehicleType === 'twoWheelers' ? availableSlots.twoWheelers : availableSlots.fourWheelers;
-        if (slotsForVehicle === 0) {
-          return res.status(400).json({ error: 'No slots available for the selected vehicle type' });
-        }
-        const serviceRequest = new requestModel({
-            placeName,
-            vehicleType,
-            duration,
-            status: 'Pending',
-          });
-          await serviceRequest.save();
-          res.send({message:"sending request to vehicle"},serviceRequest);
-        } catch (err) {
-          console.error('Error creating service request:', err);
-          res.status(500).json({ error: 'Server error' });
-        }
-})
+serviceRequest.post('/users/servicesRequest', async (req, res) => {
+  try {
+    const { place, vehicleType, duration } = req.body;
+    const parkingPlace = await parkingmodel.findOne({ place });
+
+    if (!parkingPlace) {
+      return res.status(404).json({ error: 'Parking place not found' });
+    }
+
+    const { availableSlots, vehicleTypesAllowed } = parkingPlace;
+    const slotsForVehicle = vehicleType === 'twoWheelers' ? availableSlots.twoWheelers : availableSlots.fourWheelers;
+
+    if (slotsForVehicle === 0) {
+      return res.status(400).json({ error: 'No slots available for the selected vehicle type' });
+    }
+
+    if (!vehicleTypesAllowed.includes(vehicleType)) {
+      return res.status(400).json({ error: 'Selected vehicle type not allowed in this parking place' });
+    }
+
+    const serviceRequest = new requestModel({
+      place,
+      vehicleType,
+      duration,
+      status: 'Pending',
+    });
+
+    await serviceRequest.save();
+    res.status(200).json({ message: 'Sending request to vehicle', serviceRequest });
+  } catch (err) {
+    console.error('Error creating service request:', err);
+    res.status(500).json({ error: 'Server error', specificError: err.message });
+  }
+});
+
 
 serviceRequest.get('/users/service-requests', async (req, res) => {
     try {

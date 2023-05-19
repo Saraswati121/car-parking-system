@@ -14,6 +14,7 @@ export const Navbar = () => {
             <a href="/user">Home</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
+            <a href="/review">Review</a>
             <button className="btn" onClick={()=>nav('/') }>Logout</button>
         </div>
     </div>

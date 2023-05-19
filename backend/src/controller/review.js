@@ -2,12 +2,13 @@ const Router = require('express');
 const reviewRoute = Router();
 const reviewModel = require('../models/reviewModel');
 
-reviewRoute.post('/users/reviews', async (req, res) => {
+reviewRoute.post('/users/reviews/:id', async (req, res) => {
   try {
-    const { user, serviceRequestId, rating, comment } = req.body;
+    const { rating, comment } = req.body;
+    const { id } = req.params;
     const review = new reviewModel({
-      user,
-      serviceRequestId,
+      user: req.user.id,
+      serviceRequestId: id,
       rating,
       comment,
     });
