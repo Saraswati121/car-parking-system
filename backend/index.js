@@ -17,7 +17,7 @@ app.use('/',serviceReq)
 app.use('/',reviews)
 
 app.get("/",(req,res)=>{
-    res.send({ message: "Welcome to ideoticAuth Backend"})
+    res.send({ message: "Welcome to parking-system Backend"})
 })
 
 const port = process.env.PORT || 8080;
