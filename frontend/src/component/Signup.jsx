@@ -33,7 +33,7 @@ export const Signup = () => {
 			return;
 		  }
     try {
-      let url = "https://parking-system-8agi.onrender.com/auth/signup";
+      let url = "http://localhost:8080/auth/signup";
       const { data } = await axios.post(url, formData);
       console.log(data);
       nav("/login");

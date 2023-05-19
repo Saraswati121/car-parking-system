@@ -18,7 +18,7 @@ export const Login = () => {
 			return;
 		  }
 			try{
-			const url = "https://parking-system-8agi.onrender.com/auth/login";
+			const url = "http://localhost:8080/auth/login";
 			const { data } = await axios.post(url, fdata);
 			console.log(data)
 			localStorage.setItem("token", data.token);
