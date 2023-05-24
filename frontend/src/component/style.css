@@ -208,4 +208,25 @@ th, td {
   /* filter: drop-shadow(30px 10px 4px #4444dd); */
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+.password_container {
+  position: relative;
+}
 
+.show_password_button1 {
+  position: absolute;
+  right: 95px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.show_password_button2 {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
