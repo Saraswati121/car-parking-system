@@ -22,15 +22,24 @@ parkingRoute.post("/parkingPlace",async(req,res)=>{
   if (role !== "Admin") {
     return res.status(403).send({ message: "Not authorized" });
   }
-    const { place, address, availableSlots, vehicleTypesAllowed, price } = req.body;
+    const { place,pincode, address, availableSlots, twoWheelersprice,fourWheelersprice, } = req.body;
+    if (!place || !pincode || !address || !availableSlots || !twoWheelersprice || !fourWheelersprice) {
+      return res.status(422).send({ message: "fill all the details" });
+    }
+    if(isNaN(pincode)){
+      return res.status(422).send({ message: "pincode should be a number" });
+    }
     const parkingPlace = new parkingmodel({
       place,
+      pincode,
       address,
       availableSlots,
-      vehicleTypesAllowed,
-      price
+      twoWheelersprice,
+      fourWheelersprice,
+
     });
     const savedParkingPlace = await parkingPlace.save();
+    
     res.status(201).send({ message: "parking place added successfully", savedParkingPlace});;
   } catch (error) {
     res.status(500).json({ message: 'Failed to create parking place', error});

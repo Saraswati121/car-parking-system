@@ -28,9 +28,9 @@ export const ParkingList = () => {
             <th>Place</th>
             <th>Address</th>
             <th>Available Slots - Two Wheelers</th>
+            <th>Two Wheelers Price</th>
             <th>Available Slots - Four Wheelers</th>
-            <th>Vehicle Types Allowed</th>
-            <th>Price</th>
+            <th>Four Wheelers Price</th>
           </tr>
         </thead>
         <tbody>
@@ -39,9 +39,9 @@ export const ParkingList = () => {
               <td>{parkingPlace.place}</td>
               <td>{parkingPlace.address}</td>
               <td>{parkingPlace.availableSlots.twoWheelers}</td>
+              <td>{parkingPlace.twoWheelersprice}</td>
               <td>{parkingPlace.availableSlots.fourWheelers}</td>
-              <td>{parkingPlace.vehicleTypesAllowed.join(', ')}</td>
-              <td>{parkingPlace.price}</td>
+              <td>{parkingPlace.fourWheelersprice}</td>
             </tr>
           ))}
         </tbody>

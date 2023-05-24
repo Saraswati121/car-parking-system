@@ -2,15 +2,17 @@ const Router = require('express');
 const reviewRoute = Router();
 const reviewModel = require('../models/reviewModel');
 
-reviewRoute.post('/users/reviews/:id', async (req, res) => {
+reviewRoute.post('/users/reviews', async (req, res) => {
   try {
     const { rating, comment } = req.body;
-    const { id } = req.params;
+    if (!rating || !comment ) {
+      return res.status(422).send({ message: "fill all the details" });
+    }
+    //const { userId } = req.user;
     const review = new reviewModel({
-      user: req.user.id,
-      serviceRequestId: id,
       rating,
       comment,
+      //user_id: userId, 
     });
     await review.save();
     res.status(201).send({ message: 'Review created successfully', review });
@@ -20,10 +22,13 @@ reviewRoute.post('/users/reviews/:id', async (req, res) => {
   }
 });
 
+
+
 reviewRoute.get('/reviews', async (req, res) => {
   try {
-    const reviews = await reviewModel.find().populate('user', 'userName email');
-    res.json(reviews);
+   // const reviews = await reviewModel.find().populate('user_id');
+   const reviews = await reviewModel.find()
+    res.send(reviews);
   } catch (err) {
     console.error('Error fetching reviews:', err);
     res.status(500).json({ error: 'Server error' });

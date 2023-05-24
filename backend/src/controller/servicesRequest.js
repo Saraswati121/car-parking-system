@@ -5,26 +5,28 @@ const parkingmodel = require("../models/Parkingplace")
 
 serviceRequest.post('/users/servicesRequest', async (req, res) => {
   try {
-    const { place, vehicleType, duration } = req.body;
-    const parkingPlace = await parkingmodel.findOne({ place });
-
-    if (!parkingPlace) {
-      return res.status(404).json({ error: 'Parking place not found' });
+    const { place,pincode, vehicleType, duration } = req.body;
+    
+    if (!place || !pincode || !vehicleType || !duration) {
+      return res.status(422).send({ message: "fill all the details" });
     }
-
-    const { availableSlots, vehicleTypesAllowed } = parkingPlace;
-    const slotsForVehicle = vehicleType === 'twoWheelers' ? availableSlots.twoWheelers : availableSlots.fourWheelers;
-
-    if (slotsForVehicle === 0) {
-      return res.status(400).json({ error: 'No slots available for the selected vehicle type' });
+    if(isNaN(pincode)){
+      return res.status(422).send({ message: "pincode should be a number" });
     }
+    // const { availableSlots, vehicleTypesAllowed } = parkingPlace;
+    // const slotsForVehicle = vehicleType === 'twoWheelers' ? availableSlots.twoWheelers : availableSlots.fourWheelers;
 
-    if (!vehicleTypesAllowed.includes(vehicleType)) {
-      return res.status(400).json({ error: 'Selected vehicle type not allowed in this parking place' });
-    }
+    // if (slotsForVehicle === 0) {
+    //   return res.status(400).json({ error: 'No slots available for the selected vehicle type' });
+    // }
+
+    // if (!vehicleTypesAllowed || !vehicleTypesAllowed.includes(vehicleType)) {
+    //   return res.status(400).json({ error: 'Selected vehicle type not allowed in this parking place' });
+    // }
 
     const serviceRequest = new requestModel({
       place,
+      pincode,
       vehicleType,
       duration,
       status: 'Pending',
@@ -38,11 +40,11 @@ serviceRequest.post('/users/servicesRequest', async (req, res) => {
   }
 });
 
-
 serviceRequest.get('/users/service-requests', async (req, res) => {
     try {
+      const parkingPlace = await parkingmodel.findOne({ place });
       const serviceRequests = await requestModel.find();
-      res.json(serviceRequests);
+      res.json(serviceRequests,parkingPlace);
     } catch (err) {
       console.error('Error fetching service requests:', err);
       res.status(500).json({ error: 'Server error' });

@@ -31,6 +31,13 @@ authRoute.post("/login",async(req,res) => {
     if (!email || !password) {
         return res.status(422).send({ message: "fill all the details" });
     }
+    let validemail= /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(password.length < 8){
+      return res.status(422).send({ message: "please enter a password with atleast 8 characters" });
+    }
+    if(!validemail.test(email)){
+      return res.status(422).send({ message: "please enter a valid email address" });
+    }
     const validUser = await authmodel.findOne({email,password})
 
     if(!validUser){

@@ -2,6 +2,7 @@ const express = require('express');
 const connect = require("./src/config/db")
 const authentication = require("./src/controller/auth")
 const parkingplace= require("./src/controller/parkingPlace")
+const contactdetail= require('./src/controller/contact')
 const serviceReq= require("./src/controller/servicesRequest")
 const reviews = require("./src/controller/review")
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors())
 app.use("/auth",authentication)
 app.use("/",parkingplace)
 app.use('/',serviceReq)
+app.use('/',contactdetail)
 app.use('/',reviews)
 
 app.get("/",(req,res)=>{

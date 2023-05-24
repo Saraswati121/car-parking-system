@@ -4,7 +4,8 @@ import './style.css'
 import { Link,useNavigate } from "react-router-dom";
 
 export const Login = () => {
-  const [fdata, setFdata] = useState({ email: "", password: "" });
+  const [fdata, setFdata] = useState({ email: "", password: "" })
+  
   const nav=useNavigate()
   const handleChange = (e)=>{
     const {value,name} = e.target
@@ -16,6 +17,9 @@ export const Login = () => {
 		 if (!fdata.email || !fdata.password) {
 			alert('Please fill in all details');
 			return;
+		  }
+		  if(fdata.password.length < 8){
+			alert("Please enter atleast 8 characters")
 		  }
 			try{
 			const url = "http://localhost:8080/auth/login";
@@ -47,13 +51,16 @@ export const Login = () => {
 							onChange={handleChange}
 							value={fdata.email}
 						/>
+						<br/><div>
 						<input
 							type="password"
 							placeholder="Password"
 							name="password"
 							onChange={handleChange}
 							value={fdata.password}
-						/><br/>
+						/>
+						
+						</div>
 						<button type="submit" className='grn_btn'>
 							Sing In
 						</button>

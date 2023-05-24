@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { Navbar } from "./Navbar";
+import axios from "axios";
 import { Button, TextField, useTheme, Grid, Paper } from "@mui/material";
 
 export const Contact = () => {
   const theme = useTheme();
-  const [formData, setFormData] = useState("");
+  const [formData, setFormData] = useState({
+    firstName:"",
+    lastName:"",
+    feedback:""
+  });
   const styles = {
     mainCont: {
       marginTop: "5em",
@@ -39,9 +44,19 @@ export const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("submitted");
+    if (!formData.firstName || !formData.lastName || !formData.feedback ) {
+			alert('Please fill in all details');
+			return;
+		  }
+      try{
+        let url = "http://localhost:8080/contact";
+        const { data } = await axios.post(url, formData);
+        console.log(data);
+      }catch(err){
+        console.log(err);
+      }
   };
   return (
     <div>
@@ -84,18 +99,6 @@ export const Contact = () => {
                     label="Enter Your last name"
                     onChange={handleChange}
                     value={formData.lastName}
-                  />
-                </Grid>
-                <Grid item sm={12} xs={12} sx={styles.ipFields}>
-                  <TextField
-                    name="country"
-                    type="text"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Enter Your Country name"
-                    onChange={handleChange}
-                    value={formData.country}
                   />
                 </Grid>
                 <Grid item sm={12} xs={12} sx={styles.ipFields}>

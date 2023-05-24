@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Navbar } from './Navbar';
+import './style.css';
 import axios from 'axios';
 
 export const Review = ({ serviceRequestId }) => {
@@ -21,10 +23,15 @@ export const Review = ({ serviceRequestId }) => {
 
   const createReview = async (e) => {
     e.preventDefault();
+    if (!rating || !comment  ) {
+			alert('Please fill in all details');
+			return;
+		  }
     try {
       const newReview = { rating, comment };
-      await axios.post(`http://localhost:8080/users/reviews/${serviceRequestId}`, newReview);
-      fetchReviews();
+      const response = await axios.post('http://localhost:8080/users/reviews', newReview);
+      const createdReview = response.data.review;
+      setReviews([...reviews, createdReview]);
       setRating(0);
       setComment('');
     } catch (error) {
@@ -34,6 +41,9 @@ export const Review = ({ serviceRequestId }) => {
 
   return (
     <div>
+      <div>
+        <Navbar />
+      </div>
       <h1>Reviews</h1>
       <form onSubmit={createReview}>
         <label>
@@ -54,19 +64,21 @@ export const Review = ({ serviceRequestId }) => {
           />
         </label>
         <br />
-        <button type="submit">Create Review</button>
+        <button type="submit" id="adbtn">
+          Create Review
+        </button>
       </form>
-      <ul>
-        {reviews.map((review) => (
-          <li key={review._id}>
-            <strong>User:</strong> {review.user.userName}, {review.user.email}
-            <br />
-            <strong>Rating:</strong> {review.rating}
-            <br />
-            <strong>Comment:</strong> {review.comment}
-          </li>
-        ))}
-      </ul>
+      <div style={{marginTop:"10px"}}>
+        <div>
+          {reviews.map((review) => (
+            <div key={review._id}>
+              <strong>Rating:</strong> {review.rating}
+              <br />
+              <strong>Comment:</strong> {review.comment}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

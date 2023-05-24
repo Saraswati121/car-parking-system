@@ -5,23 +5,37 @@ import axios from 'axios';
 
 export const Admin = () => {
   const [place, setPlace] = useState('');
+  const [pincode,setPincode] = useState('');
   const [address, setAddress] = useState('');
   const [twoWheelers, setTwoWheelers] = useState(0);
   const [fourWheelers, setFourWheelers] = useState(0);
-  const [vehicleTypesAllowed, setVehicleTypesAllowed] = useState('');
-  const [price, setPrice] = useState(0);
+  const [twoWheelersprice, setTwoWheelersprice] = useState(0);
+  const [fourWheelersprice, setFourWheelersprice] = useState(0);
   const nav = useNavigate();
 
   const addParkingPlace = async (e) => {
     e.preventDefault();
+    if (!place || !pincode || !address || twoWheelers < 0 || fourWheelers < 0 || twoWheelersprice < 0 || fourWheelersprice < 0) {
+      alert("Please fill in all the details and enter valid values");
+      return;
+    }
+    if (isNaN(pincode)) {
+      alert("Pincode should be a number");
+      return;
+    }
+    if (pincode.length !== 6) {
+      alert("Pincode should be exactly 6 digits");
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
       const newParkingPlace = {
         place,
+        pincode,
         address,
         availableSlots: { twoWheelers, fourWheelers },
-        vehicleTypesAllowed: vehicleTypesAllowed.split(',').map((type) => type.trim()),
-        price,
+        twoWheelersprice,
+        fourWheelersprice
       };
       await axios.post('http://localhost:8080/parkingPlace', newParkingPlace,
       {
@@ -31,18 +45,18 @@ export const Admin = () => {
       }
       );
       setPlace('');
+      setPincode('')
       setAddress('');
       setTwoWheelers(0);
-      setFourWheelers(0);
-      setVehicleTypesAllowed('');
-      setPrice(0);
+      setTwoWheelersprice(0);
+      setFourWheelers(0); 
+      setFourWheelersprice(0);
       nav('/parklist')
-      //console.log(newParkingPlace)
+      // console.log(vehicleTypesAllowed)
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <div>
       <NavbarA/>
@@ -52,6 +66,11 @@ export const Admin = () => {
         <label>
           Place :
           <input type="text" value={place} onChange={(e) => setPlace(e.target.value)} />
+        </label>
+        <br />
+        <label>
+          Pincode :
+          <input type="text" value={pincode} onChange={(e) => setPincode(e.target.value)} />
         </label>
         <br />
         <label>
@@ -69,6 +88,15 @@ export const Admin = () => {
         </label>
         <br />
         <label>
+         Price for - Two Wheelers :
+          <input
+            type="number"
+            value={twoWheelersprice}
+            onChange={(e) => setTwoWheelersprice(parseInt(e.target.value))}
+          />
+        </label>
+        <br />
+        <label>
           Available Slots - Four Wheelers :
           <input
             type="number"
@@ -78,20 +106,11 @@ export const Admin = () => {
         </label>
         <br />
         <label>
-          Vehicle Types Allowed :
-          <input
-            type="text"
-            value={vehicleTypesAllowed}
-            onChange={(e) => setVehicleTypesAllowed(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Price :
+        Price for - Four Wheelers :
           <input
             type="number"
-            value={price}
-            onChange={(e) => setPrice(parseInt(e.target.value))}
+            value={fourWheelersprice}
+            onChange={(e) => setFourWheelersprice(parseInt(e.target.value))}
           />
         </label>
         <br />
