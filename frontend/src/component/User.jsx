@@ -14,7 +14,7 @@ export const User = () => {
   const [vehicleType, setVehicleType] = useState('');
   const [duration, setDuration] = useState(0);
   const [cumulativePrice, setCumulativePrice] = useState(0);
-  //console.log(selectedPlace)
+  console.log(selectedPlace)
 
   useEffect(() => {
     axios.get('http://localhost:8080/parkingPlace')
@@ -32,6 +32,10 @@ export const User = () => {
       alert('Please enter a valid pincode');
       return;
     }
+    // if (selectedPlace.pincode.toString() !== pincode.toString()) {
+    //   alert('Please enter the correct pincode for the selected place');
+    //   return;
+    // }
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
@@ -53,6 +57,12 @@ export const User = () => {
     }
   };
 
+  const handlePlaceChange = (e) => {
+    const selectedPlace = e.target.value;
+    setSelectedPlace(selectedPlace);
+    setPincode(selectedPlace.pincode);
+  };
+
   const totalPrice = (e) => {
     const durationValue = parseInt(e);
     setDuration(durationValue);
@@ -62,8 +72,6 @@ export const User = () => {
       setCumulativePrice(parseInt(selectedPlace.twoWheelersprice) * durationValue);
     }
   };
-  
- console.log(typeof(duration))
 
   const styles = {
     titlePaper: {
@@ -107,7 +115,7 @@ export const User = () => {
                     labelId="vehicle-type-label"
                     id="vehicle-type-select"
                     value={selectedPlace}
-                    onChange={(e) => setSelectedPlace(e.target.value)}
+                    onChange={handlePlaceChange}
                     label="Vehicle Type"
                     sx={{
                       "& .MuiOutlinedInput-input": {

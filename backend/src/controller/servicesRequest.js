@@ -31,7 +31,6 @@ serviceRequest.post('/users/servicesRequest', async (req, res) => {
       duration,
       status: 'Pending',
     });
-
     await serviceRequest.save();
     res.status(200).json({ message: 'Sending request to vehicle', serviceRequest });
   } catch (err) {

@@ -8,11 +8,16 @@ authRoute.post("/signup", async (req, res) => {
       const userMail = await authmodel.findOne({ email: req.body.email });
       const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-
+      const lowercase= 'abcdefghijklmnopqrstuvwxyz'
       if (!req.body.userName || !req.body.email || !req.body.password || !req.body.role) {
         return res.status(422).send({ message: "Please fill in all the details." });
       }
-  
+      if(req.body.userName.length <4){
+        return res.send({ message:'please enter atleast 4 characters' });
+      }
+      if(req.body.userName[0]===lowercase){
+        return res.send({message:'first letter should be a capital letter'})
+      }
       if (userMail) {
         return res.send({ message: "User already registered." });
       }

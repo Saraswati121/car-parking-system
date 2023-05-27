@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const ParkingList = () => {
     const [parkingPlaces, setParkingPlaces] = useState([]);
-
+console.log(parkingPlaces)
   useEffect(() => {
     fetchParkingPlaces();
   }, []);
