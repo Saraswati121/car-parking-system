@@ -28,8 +28,18 @@ export const Signup = () => {
   
   const handelChange = (e) => {
     const { value, name } = e.target;
-    setFormData({ ...formData, [name]: value });
+    let modifiedValue = value;
+  
+    if (name === 'userName') {
+      // Check if the first letter is lowercase and capitalize it
+      if (value && /^[a-z]/.test(value)) {
+        modifiedValue = value.charAt(0).toUpperCase() + value.slice(1);
+      }
+    }
+  
+    setFormData({ ...formData, [name]: modifiedValue });
   };
+  
 
   const isValidEmail = (email) => {
     const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -15,8 +15,8 @@ authRoute.post("/signup", async (req, res) => {
       if(req.body.userName.length <4){
         return res.send({ message:'please enter atleast 4 characters' });
       }
-      if(req.body.userName[0]===lowercase){
-        return res.send({message:'first letter should be a capital letter'})
+      if (lowercase.includes(req.body.userName[0])) {
+        return res.send({ message: 'The first letter of the username should be a capital letter.' });
       }
       if (userMail) {
         return res.send({ message: "User already registered." });
