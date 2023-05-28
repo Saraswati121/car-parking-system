@@ -28,14 +28,11 @@ export const User = () => {
       alert('Please fill in all the details');
       return;
     }
-    if (isNaN(pincode) || pincode.length !== 6) {
+    if (isNaN(pincode) || String(pincode).length !== 6) {
+      //console.log('Invalid Pincode:', pincode, typeof pincode, String(pincode).length);
       alert('Please enter a valid pincode');
       return;
-    }
-    // if (selectedPlace.pincode.toString() !== pincode.toString()) {
-    //   alert('Please enter the correct pincode for the selected place');
-    //   return;
-    // }
+    }    
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
@@ -47,7 +44,13 @@ export const User = () => {
           },
         }
       );
-      //console.log(response.data);
+
+      console.log(response.data);
+      setSelectedPlace("");
+      setPincode("");
+      setVehicleType("");
+      setDuration(0);
+      setCumulativePrice(0);
     } catch (error) {
       if (error.response && error.response.data.message) {
         alert(error.response.data.message);
@@ -61,6 +64,8 @@ export const User = () => {
     const selectedPlace = e.target.value;
     setSelectedPlace(selectedPlace);
     setPincode(selectedPlace.pincode);
+    console.log('Selected Place:', selectedPlace);
+    console.log('Pincode:', selectedPlace.pincode);
   };
 
   const totalPrice = (e) => {
